@@ -1,0 +1,33 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.5.0
+    hooks:
+    -   id: check-toml
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+        exclude: .*\.(ipynb)$
+    -   id: trailing-whitespace
+-   repo: https://github.com/pycqa/isort
+    rev: 5.8.0
+    hooks:
+    -   id: isort
+-   repo: https://github.com/ambv/black
+    rev: 20.8b1
+    hooks:
+    - id: black
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: 3.9.0
+    hooks:
+    -    id: flake8
+         additional_dependencies: ["flake8-bugbear==21.4.3"]
+-   repo: https://github.com/nbQA-dev/nbQA
+    rev: 0.7.0
+    hooks:
+    -   id: nbqa-black
+        additional_dependencies: [black==20.8b1]
+        args: [--nbqa-mutate]
+    -   id: nbqa-isort
+        additional_dependencies: [isort==5.7.0]
+        args: [--nbqa-mutate]
+    -   id: nbqa-flake8
+        additional_dependencies: [flake8==3.9.0, flake8-bugbear==21.4.3]

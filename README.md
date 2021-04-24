@@ -3,6 +3,19 @@
 
 Analyzing relationships between bird calls and environmental data.
 
+## Installation
+
+```python
+$ python -m venv venv
+$ source ./venv/bin/activate
+(venv) $ pip install -r requirements.txt
+(venv) $ brew install pre-commit
+(venv) $ pre-commit install
+```
+
+If you want to skip the pre-commit checks, you need to pass the
+`--no-verify-flag`.
+
 ## Project Organization
 
 ```

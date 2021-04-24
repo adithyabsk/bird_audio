@@ -87,3 +87,9 @@ target/
 
 # Mypy cache
 .mypy_cache/
+
+# pyenv configuration
+.python-version
+
+# pip wheel metadata
+pip-wheel-metadata
