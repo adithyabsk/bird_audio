@@ -1,0 +1,9 @@
+# local package
+-e .
+
+# Dev Requirements
+click
+flake8
+black
+isort
+python-dotenv>=0.5.1
