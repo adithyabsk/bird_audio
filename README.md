@@ -9,12 +9,18 @@ Analyzing relationships between bird calls and environmental data.
 $ python -m venv venv
 $ source ./venv/bin/activate
 (venv) $ pip install -r requirements.txt
-(venv) $ brew install pre-commit
+(venv) $ brew install pre-commit dvc
 (venv) $ pre-commit install
 ```
 
 If you want to skip the pre-commit checks, you need to pass the
 `--no-verify-flag`.
+
+Now you'll want to [setup your kaggle keys](https://github.com/Kaggle/kaggle-api#api-credentials)
+
+```python
+(venv) $ cp env.sample .env  # Now replace the keys with your keys
+```
 
 ## Project Organization
 
