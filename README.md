@@ -3,6 +3,20 @@
 
 Analyzing relationships between bird calls and environmental data.
 
+**Relevant Links**
+
+* [Kaggle Dataset: Bird songs](https://www.kaggle.com/c/birdclef-2021)
+* [Collaborative Notebooks: Deepnote](https://www.deepnote.com)
+* [Repo template based on Cookie Cutter Data](https://github.com/drivendata/cookiecutter-data-science)
+* [Data versioning: DVC](https://dvc.org/doc/start/data-and-model-versioning)
+* [Linting manager: pre-commit](https://pre-commit.com/)
+  * [Notebook Linting](https://github.com/nbQA-dev/nbQA)
+  * [flake8](https://github.com/PyCQA/flake8)
+  * [black](https://github.com/psf/black)
+  * [isort](https://github.com/pycqa/isort)
+  * [flake8-bugbear](https://github.com/PyCQA/flake8-bugbear)
+* [Custom CLI Tools: click](https://github.com/pallets/click)
+
 ## Installation
 
 ```python
