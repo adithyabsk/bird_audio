@@ -5,7 +5,10 @@
 jupyter==1.0.0
 click==7.1.2
 python-dotenv>=0.5.1
-kaggle==1.5.12
+requests==2.25.1
+yarl==1.6.3
+pandas==1.2.4
+tqdm==4.60.0
 
 # Linting
 nbqa==0.7.0
