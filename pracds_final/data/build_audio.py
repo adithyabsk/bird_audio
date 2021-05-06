@@ -11,7 +11,7 @@ from requests.packages.urllib3.util.retry import Retry
 from tqdm import tqdm
 from yarl import URL
 
-DownloadSetList = Union[URL, str, Path]
+DownloadSetList = Union[URL, str, int, Path]
 
 
 def download_audio_recording(download_info: List[DownloadSetList]):
@@ -24,13 +24,15 @@ def download_audio_recording(download_info: List[DownloadSetList]):
 
     """
     # We use a tuple as the single argument because it works better with multiprocessing map
-    audio_url, file_name, output_path = download_info
+    audio_url, file_name, file_id, output_path = download_info
     session = requests.Session()
     retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])
     session.mount("https://", HTTPAdapter(max_retries=retries))
     resp = session.get(str(audio_url))
     if resp.status_code == 200:
-        with open(output_path / file_name, "wb+") as f:
+        fname_ext = Path(file_name).suffix
+        fpath = output_path / f"{file_id}{fname_ext}"
+        with open(fpath, "wb+") as f:
             f.write(resp.content)
     else:
         tqdm.write(f"Failed to get: {audio_url}")
@@ -71,7 +73,9 @@ def build_download_set(
     # Add protocol to the audio url paths
     filtered_df.file = "https:" + filtered_df.file
     filtered_df["output_path"] = pd.Series([output_path] * len(filtered_df))
-    download_set = filtered_df[["file", "file-name", "output_path"]].values.tolist()
+    download_set = filtered_df[
+        ["file", "file-name", "id", "output_path"]
+    ].values.tolist()
 
     return download_set
 
