@@ -68,11 +68,11 @@ def build_download_set(
 
     """
     df = pd.read_csv(metadata_file)
+    df["output_path"] = pd.Series([output_path] * len(df))
     filter_ids = pd.read_json(filter_file).squeeze()
     filtered_df = df.loc[df.id.isin(filter_ids)].copy()
     # Add protocol to the audio url paths
     filtered_df.file = "https:" + filtered_df.file
-    filtered_df["output_path"] = pd.Series([output_path] * len(filtered_df))
     download_set = filtered_df[
         ["file", "file-name", "id", "output_path"]
     ].values.tolist()

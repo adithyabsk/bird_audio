@@ -63,11 +63,11 @@ def build_download_set(
 
     """
     df = pd.read_csv(metadata_file)
+    df["output_path"] = pd.Series([output_path] * len(df))
     filter_ids = pd.read_json(filter_file).squeeze()
     filtered_df = df.loc[df.id.isin(filter_ids)].copy()
     # Setup sonogram column
     # other options for keys ("small", "med", "large", "full")
-    filtered_df["output_path"] = pd.Series([output_path] * len(filtered_df))
     filtered_df["sono"] = filtered_df.sono.apply(
         lambda data_dict: "https:" + json.loads(data_dict.replace("'", '"'))["med"]
     )
