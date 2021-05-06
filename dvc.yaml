@@ -2,27 +2,36 @@ stages:
   build_meta:
     cmd: python pracds_final/data/build_meta.py data/raw/metadata.csv
     deps:
-      - pracds_final/data/build_meta.py
+    - pracds_final/data/build_meta.py
     params:
-      - build.meta.queries
+    - build.meta.queries
     outs:
-      - data/raw/metadata.csv
+    - data/raw/metadata.csv
   build_filter:
     cmd: python pracds_final/data/build_filter.py data/raw/metadata.csv data/raw/filter_ids.json
     deps:
-      - data/raw/metadata.csv
-      - pracds_final/data/build_filter.py
+    - data/raw/metadata.csv
+    - pracds_final/data/build_filter.py
     params:
-      - build.filter.total_seconds
-      - build.filter.unique_birds
+    - build.filter.total_seconds
+    - build.filter.unique_birds
     outs:
-      - data/raw/filter_ids.json
+    - data/raw/filter_ids.json
   build_audio:
     cmd: python pracds_final/data/build_audio.py data/raw/metadata.csv data/raw/filter_ids.json
       data/raw/recordings
     deps:
-      - data/raw/filter_ids.json
-      - data/raw/metadata.csv
-      - pracds_final/data/build_audio.py
+    - data/raw/filter_ids.json
+    - data/raw/metadata.csv
+    - pracds_final/data/build_audio.py
     outs:
-      - data/raw/recordings
+    - data/raw/recordings
+  build_sono:
+    cmd: python pracds_final/data/build_sono.py data/raw/metadata.csv data/raw/filter_ids.json
+      data/raw/sonograms
+    deps:
+    - data/raw/filter_ids.json
+    - data/raw/metadata.csv
+    - pracds_final/data/build_sono.py
+    outs:
+    - data/raw/sonograms
