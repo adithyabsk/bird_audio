@@ -2,3 +2,6 @@ build:
   meta:
     queries:
       - 'cnt:"United States"'
+  filter:
+    unique_birds: 220
+    total_seconds: 20

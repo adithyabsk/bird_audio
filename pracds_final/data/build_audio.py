@@ -21,7 +21,7 @@ FILE_PATH = Path(__file__).parent
 PARAMS_PATH = FILE_PATH / "../../params.yaml"
 
 
-def get_page_recordings(song_url: URL) -> JSON:
+def get_page_recording(song_url: URL) -> JSON:
     """Use requests to get an individual page of recordings from Xeno Canto.
 
     Args:
@@ -70,7 +70,7 @@ def search_recordings(**query_params) -> List[JSON]:
                 recordings.extend(
                     itertools.chain(
                         *tqdm(
-                            ppe.map(get_page_recordings, page_urls), total=num_pages - 1
+                            ppe.map(get_page_recording, page_urls), total=num_pages - 1
                         )
                     )
                 )

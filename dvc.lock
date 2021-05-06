@@ -14,3 +14,20 @@ stages:
     - path: data/raw/metadata.csv
       md5: 0f787250afb3f905bc8406d5affa15ab
       size: 47794273
+  build_filter:
+    cmd: python pracds_final/data/build_filter.py data/raw/metadata.csv data/raw/filter_ids.json
+    deps:
+    - path: data/raw/metadata.csv
+      md5: 0f787250afb3f905bc8406d5affa15ab
+      size: 47794273
+    - path: pracds_final/data/build_filter.py
+      md5: 1f26a3000527b6b56cdb74bcdde316cd
+      size: 2484
+    params:
+      params.yaml:
+        build.filter.total_seconds: 20
+        build.filter.unique_birds: 220
+    outs:
+    - path: data/raw/filter_ids.json
+      md5: 3bec728e790387050cc35c20dc38fcfd
+      size: 100227
