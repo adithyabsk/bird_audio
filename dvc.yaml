@@ -1,0 +1,9 @@
+stages:
+  build_meta:
+    cmd: python pracds_final/data/build_meta.py data/raw/metadata.csv
+    deps:
+      - pracds_final/data/build_meta.py
+    params:
+      - build.meta.queries
+    outs:
+      - data/raw/metadata.csv

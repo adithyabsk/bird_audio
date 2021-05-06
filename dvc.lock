@@ -1,0 +1,16 @@
+schema: '2.0'
+stages:
+  build_meta:
+    cmd: python pracds_final/data/build_meta.py data/raw/metadata.csv
+    deps:
+    - path: pracds_final/data/build_meta.py
+      md5: fe24b4011d60bcf468f90ee9f5bbe146
+      size: 3653
+    params:
+      params.yaml:
+        build.meta.queries:
+        - cnt:"United States"
+    outs:
+    - path: data/raw/metadata.csv
+      md5: 0f787250afb3f905bc8406d5affa15ab
+      size: 47794273
