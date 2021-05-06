@@ -5,3 +5,10 @@ build:
   filter:
     unique_birds: 220
     total_seconds: 20
+    manual_removal:
+      # Missing Sono (fails to get)
+      - 375264
+      - 385654
+      - 375263
+      - 591568
+      - 375269

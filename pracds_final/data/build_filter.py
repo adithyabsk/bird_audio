@@ -1,6 +1,7 @@
 """Build filter list"""
 import json
 from pathlib import Path
+from typing import List
 
 import click
 import pandas as pd
@@ -12,7 +13,8 @@ PARAMS_PATH = FILE_PATH / "../../params.yaml"
 
 
 def read_and_filtered_df(
-    metadata_file: Path, unique_birds: int, total_seconds: int
+    metadata_file: Path, unique_birds: int, total_seconds: int,
+        manual_filter_list: List[int]
 ) -> pd.DataFrame:
     """Read metadata csv into a dataframe and filter it using the kwargs.
 
@@ -40,6 +42,10 @@ def read_and_filtered_df(
         df.en.isin(birds)
         # Make sure the recording length is less than M seconds
         & (df.total_seconds < total_seconds)
+        # Manually remove specific ids for reasons specified in params.yaml
+        & ~df.id.isin(manual_filter_list)
+        # Make sure that file are not null (url for audio)
+        & ~df.file.isnull()
     ]
 
     return filtered_df
@@ -64,8 +70,9 @@ def main(metadata_file, output_file):
 
     unique_birds = params_dict["build"]["filter"]["unique_birds"]
     total_seconds = params_dict["build"]["filter"]["total_seconds"]
+    manual_filter_list = params_dict["build"]["filter"]["manual_removal"]
 
-    filtered_df = read_and_filtered_df(metadata_file, unique_birds, total_seconds)
+    filtered_df = read_and_filtered_df(metadata_file, unique_birds, total_seconds, manual_filter_list)
 
     with open(output_file, "w+") as json_file:
         json.dump(filtered_df.id.tolist(), json_file, indent=2)
