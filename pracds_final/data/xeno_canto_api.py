@@ -2,20 +2,36 @@
 import itertools
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
+from typing import Any, Dict, List
 
+import click
 import pandas as pd
 import requests
+import yaml
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from tqdm import tqdm
 from yarl import URL
 
+JSON = Dict[str, Any]
+
 BASE_URL = URL("https://www.xeno-canto.org/api/2")
-RAW_DATA_PATH = Path(__file__).parent / "../../data/raw"
+FILE_PATH = Path(__file__).parent
+RAW_DATA_PATH = FILE_PATH / "../../data/raw"
+PARAMS_PATH = FILE_PATH / "../../params.yaml"
 META_DATA_FILENAME = "metadata.csv"
 
 
-def get_page_recording(song_url):
+def get_page_recording(song_url: URL) -> JSON:
+    """Use requests to get an individual page of recordings from Xeno Canto.
+
+    Args:
+        song_url: The Xeno Canto page endpoint
+
+    Returns:
+        The JSON response of the request
+
+    """
     session = requests.Session()
     retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])
     session.mount("https://", HTTPAdapter(max_retries=retries))
@@ -27,7 +43,22 @@ def get_page_recording(song_url):
         tqdm.write(f"Failed to get page: {page}")
 
 
-def search_recordings(**query_params):
+def search_recordings(**query_params) -> List[JSON]:
+    """Search for recordings using the Xeno Canto search API
+
+    The keys in the return dictionaries are speified in the API docs
+
+    https://www.xeno-canto.org/explore/api
+
+
+    Args:
+        **query_params: A dictionary with query and/or page as keys with values as specified in the
+            API docs.
+
+    Returns:
+        A list of recording information (list of dictionaries)
+
+    """
     url = (BASE_URL / "recordings").with_query(query_params)
     resp = requests.get(str(url))
     if resp.status_code == 200:
@@ -35,7 +66,9 @@ def search_recordings(**query_params):
         num_pages = resp_json["numPages"]
         recordings = resp_json["recordings"]
         if num_pages > 1:
-            page_urls = [url.update_query(page=p) for p in range(2, num_pages + 1)]
+            page_urls = [
+                url.update_query(page=p) for p in range(2, 4)
+            ]  # num_pages + 1)]
             with ProcessPoolExecutor(max_workers=10) as ppe:
                 recordings.extend(
                     itertools.chain(
@@ -50,26 +83,39 @@ def search_recordings(**query_params):
     return recordings
 
 
-def download_sono(sono_list, path):
-    pass
+def save_recordings_metadata(song_list: List[JSON], output_path: Path):
+    """Convert a list of json records to a dataframe.
+
+    Saves the dataframe as a csv to the the output_path
+
+    Args:
+        song_list: A list of json dictionaries
+    """
+    df = pd.DataFrame.from_records(song_list)
+    df.to_csv(output_path, index=False)
+
+    return df
 
 
-def download_audio(audio_list, path):
-    pass
+@click.command()
+@click.argument("output_filepath", type=click.Path(exists=True))
+def main(output_filepath):
+    """Generate the audio meta data.
 
+    Uses the parameters from `params.yaml` to build a csv of recordings
 
-def save_recordings_metadata(songs_json, path, file_name):
-    df = pd.DataFrame.from_records(songs_json)
-    df.to_csv(path / file_name, index=False)
+    """
+    # Load DVC Params file
+    with open(PARAMS_PATH) as params_file:
+        params_dict = yaml.load(params_file)
+
+    # Extract the Xeno Canto list of queries to filter initial data and build a kwarg dict
+    query_list = params_dict["build"]["meta"]["queries"]
+    qp = {"query": "+".join(query_list)}
+    # Search for the recordings using the queries and save the data
+    rs = search_recordings(**qp)
+    save_recordings_metadata(rs, output_filepath)
 
 
 if __name__ == "__main__":
-    qp = {
-        "query": "+".join(
-            [
-                'cnt:"United States"',
-            ]
-        ),
-    }
-    rs = search_recordings(**qp)
-    save_recordings_metadata(rs, RAW_DATA_PATH, META_DATA_FILENAME)
+    main()

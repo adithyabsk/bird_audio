@@ -9,6 +9,7 @@ requests==2.25.1
 yarl==1.6.3
 pandas==1.2.4
 tqdm==4.60.0
+PyYAML==5.4.1
 
 # Linting
 nbqa==0.7.0

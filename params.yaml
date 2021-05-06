@@ -1,0 +1,4 @@
+build:
+  meta:
+    queries:
+      - 'cnt:"United States"'
