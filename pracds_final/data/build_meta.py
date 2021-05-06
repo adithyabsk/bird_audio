@@ -45,7 +45,7 @@ def get_page_recordings(song_url: URL) -> JSON:
 def search_recordings(**query_params) -> List[JSON]:
     """Search for recordings using the Xeno Canto search API
 
-    The keys in the return dictionaries are speified in the API docs
+    The keys in the return dictionaries are specified in the API docs
 
     https://www.xeno-canto.org/explore/api
 

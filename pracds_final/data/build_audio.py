@@ -1,121 +1,99 @@
 """Download data from Xeno Canto"""
-import itertools
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import List, Union
 
 import click
 import pandas as pd
 import requests
-import yaml
-from click import BadParameter
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from tqdm import tqdm
 from yarl import URL
 
-JSON = Dict[str, Any]
-
-BASE_URL = URL("https://www.xeno-canto.org/api/2")
-FILE_PATH = Path(__file__).parent
-PARAMS_PATH = FILE_PATH / "../../params.yaml"
+DownloadSetList = Union[URL, str, Path]
 
 
-def get_page_recording(song_url: URL) -> JSON:
-    """Use requests to get an individual page of recordings from Xeno Canto.
+def download_audio_recording(download_info: List[DownloadSetList]):
+    """Use requests to get the audio recording from Xeno Canto
+
+    Saves the downloaded file to the output_path using the name of the file on the server.
 
     Args:
-        song_url: The Xeno Canto page endpoint
-
-    Returns:
-        The JSON response of the request
+        download_info: A tuple with the audio_url, file_name, output_path as a single argument
 
     """
+    # We use a tuple as the single argument because it works better with multiprocessing map
+    audio_url, file_name, output_path = download_info
     session = requests.Session()
     retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])
     session.mount("https://", HTTPAdapter(max_retries=retries))
-    resp = session.get(str(song_url))
+    resp = session.get(str(audio_url))
     if resp.status_code == 200:
-        return resp.json().get("recordings", [])
+        with open(output_path / file_name, "wb+") as f:
+            f.write(resp.content)
     else:
-        page = song_url.query.get("page")
-        tqdm.write(f"Failed to get page: {page}")
+        tqdm.write(f"Failed to get: {audio_url}")
 
 
-def search_recordings(**query_params) -> List[JSON]:
-    """Search for recordings using the Xeno Canto search API
-
-    The keys in the return dictionaries are speified in the API docs
-
-    https://www.xeno-canto.org/explore/api
-
+def parallel_download_recordings(download_set: List[DownloadSetList]):
+    """Download recordings in a parallel manner
 
     Args:
-        **query_params: A dictionary with query and/or page as keys with values as specified in the
-            API docs.
+        download_set: A list of tuples with the info needed to download each file.
+
+    """
+    with ProcessPoolExecutor(max_workers=10) as ppe:
+        list(
+            tqdm(
+                ppe.map(download_audio_recording, download_set), total=len(download_set)
+            )
+        )
+
+
+def build_download_set(
+    metadata_file, filter_file, output_path
+) -> List[DownloadSetList]:
+    """Build the download set from filter and metadata files.
+
+    Args:
+        metadata_file: Path to the metadata csv file
+        filter_file: Path to the filter json file
+        output_path: The output path of all files
 
     Returns:
-        A list of recording information (list of dictionaries)
+        A list of lists with the required info to download a file.
 
     """
-    url = (BASE_URL / "recordings").with_query(query_params)
-    resp = requests.get(str(url))
-    if resp.status_code == 200:
-        resp_json = resp.json()
-        num_pages = resp_json["numPages"]
-        recordings = resp_json["recordings"]
-        if num_pages > 1:
-            page_urls = [url.update_query(page=p) for p in range(2, num_pages + 1)]
-            with ProcessPoolExecutor(max_workers=10) as ppe:
-                recordings.extend(
-                    itertools.chain(
-                        *tqdm(
-                            ppe.map(get_page_recording, page_urls), total=num_pages - 1
-                        )
-                    )
-                )
-    else:
-        raise Exception(f"Request failed with status code: {resp.status_code}")
+    df = pd.read_csv(metadata_file)
+    filter_ids = pd.read_json(filter_file).squeeze()
+    filtered_df = df.loc[df.id.isin(filter_ids)].copy()
+    # Add protocol to the audio url paths
+    filtered_df.file = "https:" + filtered_df.file
+    filtered_df["output_path"] = pd.Series([output_path] * len(filtered_df))
+    download_set = filtered_df[["file", "file-name", "output_path"]].values.tolist()
 
-    return recordings
-
-
-def save_recordings_metadata(song_list: List[JSON], output_path: Path):
-    """Convert a list of json records to a dataframe.
-
-    Saves the dataframe as a csv to the the output_path
-
-    Args:
-        song_list: A list of json dictionaries
-    """
-    df = pd.DataFrame.from_records(song_list)
-    df.to_csv(output_path, index=False)
-
-    return df
+    return download_set
 
 
 @click.command()
-@click.argument("output_file", type=click.Path(dir_okay=False))
-def main(output_file):
-    """Generate the audio meta data.
+@click.argument("metadata_file", type=click.Path(exists=True, dir_okay=False))
+@click.argument("filter_file", type=click.Path(exists=True, dir_okay=False))
+@click.argument("output_path", type=click.Path(dir_okay=True, file_okay=False))
+def main(metadata_file, filter_file, output_path):
+    """Generate the audio files.
 
-    Uses the parameters from `params.yaml` to build a csv of recordings
+    Uses the parameters from `params.yaml` to download recordings to the output_path
 
     """
-    output_file = Path(output_file)
-    if not output_file.parent.exists():
-        raise BadParameter("output_filepath directory must exist.")
-
-    # Load DVC Params file
-    with open(PARAMS_PATH) as params_file:
-        params_dict = yaml.safe_load(params_file)
-
-    # Extract the Xeno Canto list of queries to filter initial data and build a kwarg dict
-    query_list = params_dict["build"]["meta"]["queries"]
-    qp = {"query": "+".join(query_list)}
-    # Search for the recordings using the queries and save the data
-    rs = search_recordings(**qp)
-    save_recordings_metadata(rs, output_file)
+    metadata_file, filter_file, output_path = map(
+        Path, [metadata_file, filter_file, output_path]
+    )
+    # quirk of DVC, it deletes targets so we need to re-create the folder and re-add the .gitkeep
+    output_path.mkdir(parents=True, exist_ok=True)
+    (output_path / ".gitkeep").touch()
+    download_set = build_download_set(metadata_file, filter_file, output_path)
+    parallel_download_recordings(download_set)
 
 
 if __name__ == "__main__":
