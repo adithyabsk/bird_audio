@@ -4,8 +4,8 @@ stages:
     cmd: python pracds_final/data/build_meta.py data/raw/metadata.csv
     deps:
     - path: pracds_final/data/build_meta.py
-      md5: 4899076ee7c3418c652cc78ba454458c
-      size: 3655
+      md5: f126eceba611effbb1f1894383137540
+      size: 3658
     params:
       params.yaml:
         build.meta.queries:
@@ -36,8 +36,8 @@ stages:
       data/raw/sonograms
     deps:
     - path: data/raw/filter_ids.json
-      md5: 3bec728e790387050cc35c20dc38fcfd
-      size: 100227
+      md5: 69b6dda6d085d56c628d2ec42852ed41
+      size: 99909
     - path: data/raw/metadata.csv
       md5: 0f787250afb3f905bc8406d5affa15ab
       size: 47794273
@@ -46,6 +46,24 @@ stages:
       size: 3376
     outs:
     - path: data/raw/sonograms
-      md5: 82a531c9213d9f7be6d87d1a799f5635.dir
-      size: 655272614
-      nfiles: 10186
+      md5: ea9e4ab898180fcad6830f0700801bec.dir
+      size: 653587009
+      nfiles: 10159
+  build_audio:
+    cmd: python pracds_final/data/build_audio.py data/raw/metadata.csv data/raw/filter_ids.json
+      data/raw/recordings
+    deps:
+    - path: data/raw/filter_ids.json
+      md5: 69b6dda6d085d56c628d2ec42852ed41
+      size: 99909
+    - path: data/raw/metadata.csv
+      md5: 0f787250afb3f905bc8406d5affa15ab
+      size: 47794273
+    - path: pracds_final/data/build_audio.py
+      md5: 7478f119b39bdb5a647ab9cf4f5d7aae
+      size: 3424
+    outs:
+    - path: data/raw/recordings
+      md5: f8748801949169688e8f3e8a921b8fec.dir
+      size: 2439122825
+      nfiles: 10159
