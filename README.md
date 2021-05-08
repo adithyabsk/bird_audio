@@ -28,7 +28,7 @@ $ source ./venv/bin/activate
 ```
 
 If you want to skip the pre-commit checks, you need to pass the
-`--no-verify-flag`.
+`--no-verify` flag.
 
 Now you'll want to [setup your kaggle keys](https://github.com/Kaggle/kaggle-api#api-credentials)
 
