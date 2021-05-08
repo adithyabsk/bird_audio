@@ -1,0 +1,69 @@
+schema: '2.0'
+stages:
+  build_meta:
+    cmd: python pracds_final/data/build_meta.py data/raw/metadata.csv
+    deps:
+    - path: pracds_final/data/build_meta.py
+      md5: f126eceba611effbb1f1894383137540
+      size: 3658
+    params:
+      params.yaml:
+        build.meta.queries:
+        - cnt:"United States"
+    outs:
+    - path: data/raw/metadata.csv
+      md5: 0f787250afb3f905bc8406d5affa15ab
+      size: 47794273
+  build_filter:
+    cmd: python pracds_final/data/build_filter.py data/raw/metadata.csv data/raw/filter_ids.json
+    deps:
+    - path: data/raw/metadata.csv
+      md5: 0f787250afb3f905bc8406d5affa15ab
+      size: 47794273
+    - path: pracds_final/data/build_filter.py
+      md5: f202a0982f4d31d1b07d6400d78a1a96
+      size: 2839
+    params:
+      params.yaml:
+        build.filter.total_seconds: 20
+        build.filter.unique_birds: 220
+    outs:
+    - path: data/raw/filter_ids.json
+      md5: 69b6dda6d085d56c628d2ec42852ed41
+      size: 99909
+  build_sono:
+    cmd: python pracds_final/data/build_sono.py data/raw/metadata.csv data/raw/filter_ids.json
+      data/raw/sonograms
+    deps:
+    - path: data/raw/filter_ids.json
+      md5: 69b6dda6d085d56c628d2ec42852ed41
+      size: 99909
+    - path: data/raw/metadata.csv
+      md5: 0f787250afb3f905bc8406d5affa15ab
+      size: 47794273
+    - path: pracds_final/data/build_sono.py
+      md5: c81b779be9d2a354c432fba2af4b67ac
+      size: 3376
+    outs:
+    - path: data/raw/sonograms
+      md5: ea9e4ab898180fcad6830f0700801bec.dir
+      size: 653587009
+      nfiles: 10159
+  build_audio:
+    cmd: python pracds_final/data/build_audio.py data/raw/metadata.csv data/raw/filter_ids.json
+      data/raw/recordings
+    deps:
+    - path: data/raw/filter_ids.json
+      md5: 69b6dda6d085d56c628d2ec42852ed41
+      size: 99909
+    - path: data/raw/metadata.csv
+      md5: 0f787250afb3f905bc8406d5affa15ab
+      size: 47794273
+    - path: pracds_final/data/build_audio.py
+      md5: 7478f119b39bdb5a647ab9cf4f5d7aae
+      size: 3424
+    outs:
+    - path: data/raw/recordings
+      md5: f8748801949169688e8f3e8a921b8fec.dir
+      size: 2439122825
+      nfiles: 10159

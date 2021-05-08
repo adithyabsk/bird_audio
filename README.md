@@ -36,6 +36,16 @@ Now you'll want to [setup your kaggle keys](https://github.com/Kaggle/kaggle-api
 (venv) $ cp env.sample .env  # Now replace the keys with your keys
 ```
 
+## DVC
+
+To pull the latest data from DVC
+
+```shell
+(venv) $ dvc pull
+```
+
+This should pull data from Google Drive into the `data/` folder.
+
 ## Project Organization
 
 ```
