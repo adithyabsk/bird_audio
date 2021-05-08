@@ -13,8 +13,10 @@ PARAMS_PATH = FILE_PATH / "../../params.yaml"
 
 
 def read_and_filtered_df(
-    metadata_file: Path, unique_birds: int, total_seconds: int,
-        manual_filter_list: List[int]
+    metadata_file: Path,
+    unique_birds: int,
+    total_seconds: int,
+    manual_filter_list: List[int],
 ) -> pd.DataFrame:
     """Read metadata csv into a dataframe and filter it using the kwargs.
 
@@ -72,7 +74,9 @@ def main(metadata_file, output_file):
     total_seconds = params_dict["build"]["filter"]["total_seconds"]
     manual_filter_list = params_dict["build"]["filter"]["manual_removal"]
 
-    filtered_df = read_and_filtered_df(metadata_file, unique_birds, total_seconds, manual_filter_list)
+    filtered_df = read_and_filtered_df(
+        metadata_file, unique_birds, total_seconds, manual_filter_list
+    )
 
     with open(output_file, "w+") as json_file:
         json.dump(filtered_df.id.tolist(), json_file, indent=2)
