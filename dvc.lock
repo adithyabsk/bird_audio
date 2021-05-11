@@ -21,8 +21,8 @@ stages:
       md5: 0f787250afb3f905bc8406d5affa15ab
       size: 47794273
     - path: pracds_final/data/build_filter.py
-      md5: 5005989adca8f03e1fc6ed6cba2d3e53
-      size: 3221
+      md5: 256c2fe0ccef7b48fc2be7963d45d722
+      size: 3217
     params:
       params.yaml:
         build.filter.total_seconds: 20
@@ -36,8 +36,8 @@ stages:
       data/raw/sonograms
     deps:
     - path: data/raw/filter_ids.json
-      md5: 69b6dda6d085d56c628d2ec42852ed41
-      size: 99909
+      md5: f7f1500016e30bb420f48019bd00b1da
+      size: 69229
     - path: data/raw/metadata.csv
       md5: 0f787250afb3f905bc8406d5affa15ab
       size: 47794273
@@ -46,16 +46,16 @@ stages:
       size: 3376
     outs:
     - path: data/raw/sonograms
-      md5: ea9e4ab898180fcad6830f0700801bec.dir
-      size: 653587009
-      nfiles: 10159
+      md5: d6619d61069dfa8b0ba77b0d412b890f.dir
+      size: 463201452
+      nfiles: 7052
   build_audio:
     cmd: python pracds_final/data/build_audio.py data/raw/metadata.csv data/raw/filter_ids.json
       data/raw/recordings
     deps:
     - path: data/raw/filter_ids.json
-      md5: 69b6dda6d085d56c628d2ec42852ed41
-      size: 99909
+      md5: f7f1500016e30bb420f48019bd00b1da
+      size: 69229
     - path: data/raw/metadata.csv
       md5: 0f787250afb3f905bc8406d5affa15ab
       size: 47794273
@@ -64,9 +64,9 @@ stages:
       size: 3424
     outs:
     - path: data/raw/recordings
-      md5: f8748801949169688e8f3e8a921b8fec.dir
-      size: 2439122825
-      nfiles: 10159
+      md5: 1f8f5d27e1043123ef273a09e1cb04f7.dir
+      size: 1703058026
+      nfiles: 7052
   build_song_vs_call:
     cmd: python pracds_final/data/build_song_vs_call.py data/raw/metadata.csv data/raw/filter_ids.json
       data/raw/song_vs_call.json
@@ -89,12 +89,12 @@ stages:
       data/processed/svc_split.json
     deps:
     - path: data/raw/song_vs_call.json
-      md5: 0efc87ef8b3689eb28f4bc9a093e7f30
-      size: 54344
+      md5: f81bca25287945a8f7a1d6b689b343f5
+      size: 56928
     - path: pracds_final/features/proc_svc_split.py
-      md5: 234f24fb945e6a4f9af07fc3d1e1e964
-      size: 1451
+      md5: d155dc3d8b1e01cd94767135b0aacca6
+      size: 1510
     outs:
     - path: data/processed/svc_split.json
-      md5: e19fc78e75e65a2884b721f66b7bfb9c
-      size: 65417
+      md5: ef20d3a7f64fd9802481b4d577f3932b
+      size: 68569
