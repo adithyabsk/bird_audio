@@ -23,7 +23,7 @@ def build_song_vs_call_df(metadata_file: Path, filter_ids_file: Path) -> pd.Data
     filtered_df = df[df.id.isin(filtered_ids)]
 
     # build a list of filtered ids that have only either call or song (not both)
-    split_col = filtered_df.type.str.replace(" ", "").str.split(",")
+    split_col = filtered_df.type.str.lower().str.replace(" ", "").str.split(",")
     call_rows = split_col.apply(lambda l: "call" in l and "song" not in l)
     song_rows = split_col.apply(lambda l: "call" not in l and "song" in l)
     song_vs_call_df = filtered_df[call_rows | song_rows]
