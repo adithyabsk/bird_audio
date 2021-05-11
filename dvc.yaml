@@ -44,3 +44,10 @@ stages:
       - pracds_final/data/build_song_vs_call.py
     outs:
       - data/raw/song_vs_call.json
+  proc_svc_split:
+    cmd: python pracds_final/features/proc_svc_split.py data/raw/song_vs_call.json data/processed/svc_split.json
+    deps:
+      - data/raw/song_vs_call.json
+      - pracds_final/features/proc_svc_split.py
+    outs:
+      - data/processed/svc_split.json

@@ -84,3 +84,17 @@ stages:
     - path: data/raw/song_vs_call.json
       md5: 0efc87ef8b3689eb28f4bc9a093e7f30
       size: 54344
+  proc_svc_split:
+    cmd: python pracds_final/features/proc_svc_split.py data/raw/song_vs_call.json
+      data/processed/svc_split.json
+    deps:
+    - path: data/raw/song_vs_call.json
+      md5: 0efc87ef8b3689eb28f4bc9a093e7f30
+      size: 54344
+    - path: pracds_final/features/proc_svc_split.py
+      md5: 234f24fb945e6a4f9af07fc3d1e1e964
+      size: 1451
+    outs:
+    - path: data/processed/svc_split.json
+      md5: e19fc78e75e65a2884b721f66b7bfb9c
+      size: 65417
