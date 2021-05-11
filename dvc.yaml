@@ -35,3 +35,12 @@ stages:
     - pracds_final/data/build_sono.py
     outs:
     - data/raw/sonograms
+  build_song_vs_call:
+    cmd: python pracds_final/data/build_song_vs_call.py data/raw/metadata.csv data/raw/filter_ids.json
+      data/raw/song_vs_call.json
+    deps:
+      - data/raw/filter_ids.json
+      - data/raw/metadata.csv
+      - pracds_final/data/build_song_vs_call.py
+    outs:
+      - data/raw/song_vs_call.json

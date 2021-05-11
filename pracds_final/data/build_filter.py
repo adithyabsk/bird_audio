@@ -12,7 +12,7 @@ FILE_PATH = Path(__file__).parent
 PARAMS_PATH = FILE_PATH / "../../params.yaml"
 
 
-def read_and_filtered_df(
+def read_and_filter_df(
     metadata_file: Path,
     unique_birds: int,
     total_seconds: int,
@@ -80,7 +80,7 @@ def main(metadata_file, output_file):
     manual_filter_list = params_dict["build"]["filter"]["manual_removal"]
     quality_levels = params_dict["build"]["filter"]["quality_levels"]
 
-    filtered_df = read_and_filtered_df(
+    filtered_df = read_and_filter_df(
         metadata_file, unique_birds, total_seconds, manual_filter_list, quality_levels
     )
 

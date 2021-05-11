@@ -67,3 +67,20 @@ stages:
       md5: f8748801949169688e8f3e8a921b8fec.dir
       size: 2439122825
       nfiles: 10159
+  build_song_vs_call:
+    cmd: python pracds_final/data/build_song_vs_call.py data/raw/metadata.csv data/raw/filter_ids.json
+      data/raw/song_vs_call.json
+    deps:
+    - path: data/raw/filter_ids.json
+      md5: f7f1500016e30bb420f48019bd00b1da
+      size: 69229
+    - path: data/raw/metadata.csv
+      md5: 0f787250afb3f905bc8406d5affa15ab
+      size: 47794273
+    - path: pracds_final/data/build_song_vs_call.py
+      md5: 7b8ea53ba1ff17fa2c40c982a1e54f22
+      size: 2029
+    outs:
+    - path: data/raw/song_vs_call.json
+      md5: 0efc87ef8b3689eb28f4bc9a093e7f30
+      size: 54344
