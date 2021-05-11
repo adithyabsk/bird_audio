@@ -93,3 +93,6 @@ target/
 
 # pip wheel metadata
 pip-wheel-metadata
+
+# venv subdirectories
+venv/
