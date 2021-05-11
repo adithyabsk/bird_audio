@@ -17,6 +17,7 @@ def read_and_filtered_df(
     unique_birds: int,
     total_seconds: int,
     manual_filter_list: List[int],
+    quality_levels: List[str],
 ) -> pd.DataFrame:
     """Read metadata csv into a dataframe and filter it using the kwargs.
 
@@ -24,6 +25,8 @@ def read_and_filtered_df(
         metadata_file: The path to the metadata csv file
         unique_birds: The total number of unique birds on which to filter
         total_seconds: The maximum recording length in seconds to allow
+        manual_filter_list: A list of ids to manually remove from the dataset
+        quality_levels: A list of quality ratings (e.g. "A", "B", etc...)
 
     Returns:
         A filtered DataFrame with an additional `total_seconds` column
@@ -48,6 +51,8 @@ def read_and_filtered_df(
         & ~df.id.isin(manual_filter_list)
         # Make sure that file are not null (url for audio)
         & ~df.file.isnull()
+        # Make sure that the quality is in specified list
+        & df.q.isin(quality_levels)
     ]
 
     return filtered_df
@@ -73,9 +78,10 @@ def main(metadata_file, output_file):
     unique_birds = params_dict["build"]["filter"]["unique_birds"]
     total_seconds = params_dict["build"]["filter"]["total_seconds"]
     manual_filter_list = params_dict["build"]["filter"]["manual_removal"]
+    quality_levels = params_dict["build"]["filter"]["quality_levels"]
 
     filtered_df = read_and_filtered_df(
-        metadata_file, unique_birds, total_seconds, manual_filter_list
+        metadata_file, unique_birds, total_seconds, manual_filter_list, quality_levels
     )
 
     with open(output_file, "w+") as json_file:

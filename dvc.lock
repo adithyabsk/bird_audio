@@ -21,16 +21,16 @@ stages:
       md5: 0f787250afb3f905bc8406d5affa15ab
       size: 47794273
     - path: pracds_final/data/build_filter.py
-      md5: 77619052a8f20583287663f80de93f7c
-      size: 2858
+      md5: 5005989adca8f03e1fc6ed6cba2d3e53
+      size: 3221
     params:
       params.yaml:
         build.filter.total_seconds: 20
         build.filter.unique_birds: 220
     outs:
     - path: data/raw/filter_ids.json
-      md5: 69b6dda6d085d56c628d2ec42852ed41
-      size: 99909
+      md5: f7f1500016e30bb420f48019bd00b1da
+      size: 69229
   build_sono:
     cmd: python pracds_final/data/build_sono.py data/raw/metadata.csv data/raw/filter_ids.json
       data/raw/sonograms
