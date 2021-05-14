@@ -96,3 +96,6 @@ pip-wheel-metadata
 
 # venv subdirectories
 venv/
+
+# Custom
+/models
