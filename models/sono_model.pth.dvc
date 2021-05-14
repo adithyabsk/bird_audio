@@ -1,0 +1,4 @@
+outs:
+- md5: d37c72cea76012318ce5396c6f5d9f96
+  size: 262234895
+  path: sono_model.pth

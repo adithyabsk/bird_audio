@@ -97,5 +97,7 @@ pip-wheel-metadata
 # venv subdirectories
 venv/
 
-# Custom
-/models
+# Models folder
+/models/*.pth
+/models/*.pkl
+/models/*.h5
