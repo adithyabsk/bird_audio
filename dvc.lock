@@ -98,3 +98,21 @@ stages:
     - path: data/processed/svc_split.json
       md5: ef20d3a7f64fd9802481b4d577f3932b
       size: 68569
+  proc_audio:
+    cmd: python pracds_final/features/proc_audio.py data/raw/song_vs_call.json data/raw/recordings
+      data/processed/audio_timeseries.json
+    deps:
+    - path: data/raw/recordings
+      md5: 1f8f5d27e1043123ef273a09e1cb04f7.dir
+      size: 1703058026
+      nfiles: 7052
+    - path: data/raw/song_vs_call.json
+      md5: f81bca25287945a8f7a1d6b689b343f5
+      size: 56928
+    - path: pracds_final/features/proc_audio.py
+      md5: 1254e1318f01e21b4f6aed50c0bd7a74
+      size: 5094
+    outs:
+    - path: data/processed/audio_features.json
+      md5: 24355838d6a9845c1ab82182704c6c3b
+      size: 1115524
