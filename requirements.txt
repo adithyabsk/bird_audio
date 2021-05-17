@@ -13,6 +13,10 @@ PyYAML==5.4.1
 librosa==0.6.3
 numba==0.48
 matplotlib==3.3.2
+shapely==1.7.1 --no-binary=shapely
+geopandas==0.9.0
+geoplot==0.4.1
+rtree==0.9.7
 seaborn==0.11.1
 scikit-learn==0.24.2
 sklearn-pandas==2.2.0

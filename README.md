@@ -23,7 +23,7 @@ Analyzing relationships between bird calls and environmental data.
 $ python -m venv venv
 $ source ./venv/bin/activate
 (venv) $ pip install -r requirements.txt
-(venv) $ brew install pre-commit dvc
+(venv) $ brew install pre-commit dvc geos proj
 (venv) $ pre-commit install
 ```
 
