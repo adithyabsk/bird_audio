@@ -19,7 +19,7 @@ Analyzing relationships between bird calls and environmental data.
 
 ## Installation
 
-```python
+```shell
 $ python -m venv venv
 $ source ./venv/bin/activate
 (venv) $ pip install -r requirements.txt
@@ -32,7 +32,7 @@ If you want to skip the pre-commit checks, you need to pass the
 
 Now you'll want to [setup your kaggle keys](https://github.com/Kaggle/kaggle-api#api-credentials)
 
-```python
+```shell
 (venv) $ cp env.sample .env  # Now replace the keys with your keys
 ```
 
