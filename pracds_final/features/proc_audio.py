@@ -61,7 +61,6 @@ def highpass_filter(audio, sr, order, freq):
     )  # numerator and denominator
 
 
-
 selected_fc_params = {
     "standard_deviation": None,
     "variance": None,
@@ -74,6 +73,7 @@ manual_fc_params = {
     "root_mean_square": None,
     "spkt_welch_density": [{"coeff": 2}, {"coeff": 5}, {"coeff": 8}],
 }
+
 
 # select features to calculate
 # features can be found here: https://tsfresh.readthedocs.io/en/latest/api/tsfresh.feature_extraction.html#tsfresh.feature_extraction.feature_calculators.fft_aggregated
