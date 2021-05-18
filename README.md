@@ -1,12 +1,13 @@
 # prac_dsfinal
 
 
-Analyzing relationships between bird calls and environmental data.
+Analyzing relationships between bird calls and environmental data. See the blog
+post here:
+
+https://deepnote.com/@adithya-balaji/Analyzing-Bird-Audio-Q1tEOBxdTR2mZSXq4FhZwQ
 
 **Relevant Links**
 
-* [Kaggle Dataset: Bird songs](https://www.kaggle.com/c/birdclef-2021)
-* [Collaborative Notebooks: Deepnote](https://www.deepnote.com)
 * [Repo template based on Cookie Cutter Data](https://github.com/drivendata/cookiecutter-data-science)
 * [Data versioning: DVC](https://dvc.org/doc/start/data-and-model-versioning)
 * [Linting manager: pre-commit](https://pre-commit.com/)
@@ -30,15 +31,10 @@ $ source ./venv/bin/activate
 If you want to skip the pre-commit checks, you need to pass the
 `--no-verify` flag.
 
-Now you'll want to [setup your kaggle keys](https://github.com/Kaggle/kaggle-api#api-credentials)
-
-```shell
-(venv) $ cp env.sample .env  # Now replace the keys with your keys
-```
-
 ## DVC
 
-To pull the latest data from DVC
+To pull the latest data from DVC. (this won't work if you haven't manually been
+added to the Google Drive folder)
 
 ```shell
 (venv) $ dvc pull
